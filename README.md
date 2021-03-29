@@ -8,7 +8,7 @@ Install python 3.9
 
 Both Windows and Linux are supported
 
-1. First create a virtual envirenments using venv: `python3.9 -m venv localrecommender`
+1. First create a virtual envirenment using venv: `python3.9 -m venv localrecommender`
 2. Navigate into the env folder `cd localrecommender`
 3. Switch to that environment: `souce bin/activate`
 4. Install django: `python3.9 -m pip install django`
