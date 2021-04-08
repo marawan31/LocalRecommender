@@ -9,7 +9,7 @@ class TwitterApi:
 
     def get_tweets(self):
         #TODO: modify this bad boy
-        return self.api.GetSearch(raw_query='q=Soccer')
+        return self.api.GetSearch(raw_query='q=Soccer&tweet_mode=extended')
     
     def get_user_info(self):
         return self.api.GetUser(screen_name=settings.TWITTER_CONFIG['user_screen_name'])

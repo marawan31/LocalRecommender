@@ -36,9 +36,9 @@ def expand_tweet_urls(tweet):
     """ Replace shortened URLs with long URLs in the twitter status
         Should be used before urlize_tweet
     """
-    text = tweet.text
+    text = tweet.full_text
     urls = tweet.urls
     for url in urls:
-        text = text.replace(url.url, '<a href="%s" target="_blank">%s</a>' % (url.expanded_url, url.url))
+        text = text.replace(url.url, '<span class="text-blue-400"><a href="%s" target="_blank">%s</a></span>' % (url.expanded_url, url.url))
     tweet.text =text
     return tweet
