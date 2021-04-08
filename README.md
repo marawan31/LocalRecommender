@@ -18,6 +18,26 @@ Both Windows and Linux are supported
 8. Start the server: `python3.9 manage.py runserver`
 9. Navigate to the url shown in the console
 
+
+
 ## Contributing
 
 The only two files we will work with at first are `recommender/views.py` where the code to fetch tweets and render them will be contained, and `recommender/templates/index.html` where the html view is contained.
+
+UPDATE:
+We now also have `recommender/twipper_wrapper/twitter_api.py` to work on.
+
+to make this work with twitter you need to add `localsettings.json` and it needs to be in this form to load all the twitter api keys and token to use correctly (take those from twitter):
+
+```JSON
+{
+    "TWITTER_CONFIG":
+    {
+        "user_screen_name" : "...",
+        "api_key" : "...",
+        "api_secret": "...",
+        "access_token": "...",
+        "access_token_secret": "..."
+    }
+}
+```
