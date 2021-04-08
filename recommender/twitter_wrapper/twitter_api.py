@@ -12,9 +12,13 @@ class TwitterApi:
         return self.api.GetSearch(raw_query='q=Soccer&tweet_mode=extended')
     
     def get_user_info(self):
-        return self.api.GetUser(screen_name=settings.TWITTER_CONFIG['user_screen_name'])
-        
+        return self.api.GetUser(screen_name=settings.TWITTER_CONFIG['user_screen_name'])        
     
     def get_trends(self):                  
         return self.api.GetTrendsCurrent()
+
+    #def get_following_tweets(self):      
+    #    freinds = self.api.GetFriends(screen_name=settings.TWITTER_CONFIG['user_screen_name'])           
+    #    return self.api.GetUserTimeline(screen_name=freinds[0].screen_name, exclude_replies=True, include_rts=False)
+         
     
