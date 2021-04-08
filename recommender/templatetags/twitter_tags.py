@@ -38,7 +38,11 @@ def expand_tweet_urls(tweet):
     """
     text = tweet.full_text
     urls = tweet.urls
+    if(tweet.retweeted_status != None):
+        text = tweet.retweeted_status.full_text
+        urls = tweet.retweeted_status.urls
+
     for url in urls:
         text = text.replace(url.url, '<span class="text-blue-400"><a href="%s" target="_blank">%s</a></span>' % (url.expanded_url, url.url))
-    tweet.text =text
+    tweet.text = text
     return tweet
