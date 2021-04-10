@@ -290,11 +290,10 @@
                             </div>
 
                             <div class="flex-1 text-center py-2 m-2">
-                                <a href="#"
-                                    class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:bg-blue-800 hover:text-blue-300">
-                                    <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round" stroke-width="2" stroke="currentColor"
-                                        viewBox="0 0 24 24">
+                                <a href="#" class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:bg-blue-800 hover:text-blue-300">
+                                    
+                                    <svg data-tweet="{{ tweet.full_text}}" data-tweetid="{{ tweet.id_str}}" data-userid="{{ tweet.user.id_str}}" class="coeur" 
+                                        fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" stroke="currentColor" viewBox="0 0 24 24">
                                         <path
                                             d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
                                         </path>
@@ -412,69 +411,6 @@
                 </div>
                 <hr class="border-gray-600">
 
-                <!--second trending tweet-->
-
-                <div class="flex">
-                    <div class="flex-1">
-                        <p class="px-4 ml-2 mt-3 w-48 text-xs text-gray-400">2 . Politics . Trending</p>
-                        <h2 class="px-4 ml-2 w-48 font-bold text-white">#HI-Fashion</h2>
-                        <p class="px-4 ml-2 mb-3 w-48 text-xs text-gray-400">8,464 Tweets</p>
-
-                    </div>
-                    <div class="flex-1 px-4 py-2 m-2">
-                        <a href=""
-                            class=" text-2xl rounded-full text-gray-400 hover:bg-blue-800 hover:text-blue-300 float-right">
-                            <svg class="m-2 h-5 w-5" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                                stroke-width="2" stroke="currentColor" viewBox="0 0 24 24">
-                                <path d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-                <hr class="border-gray-600">
-
-                <!--third trending tweet-->
-
-                <div class="flex">
-                    <div class="flex-1">
-                        <p class="px-4 ml-2 mt-3 w-48 text-xs text-gray-400">3 . Rock . Trending</p>
-                        <h2 class="px-4 ml-2 w-48 font-bold text-white">#Ferrari</h2>
-                        <p class="px-4 ml-2 mb-3 w-48 text-xs text-gray-400">5,586 Tweets</p>
-
-                    </div>
-                    <div class="flex-1 px-4 py-2 m-2">
-                        <a href=""
-                            class=" text-2xl rounded-full text-gray-400 hover:bg-blue-800 hover:text-blue-300 float-right">
-                            <svg class="m-2 h-5 w-5" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                                stroke-width="2" stroke="currentColor" viewBox="0 0 24 24">
-                                <path d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-                <hr class="border-gray-600">
-
-                <!--forth trending tweet-->
-
-                <div class="flex">
-                    <div class="flex-1">
-                        <p class="px-4 ml-2 mt-3 w-48 text-xs text-gray-400">4 . Auto Racing . Trending</p>
-                        <h2 class="px-4 ml-2 w-48 font-bold text-white">#vettel</h2>
-                        <p class="px-4 ml-2 mb-3 w-48 text-xs text-gray-400">9,416 Tweets</p>
-
-                    </div>
-                    <div class="flex-1 px-4 py-2 m-2">
-                        <a href=""
-                            class=" text-2xl rounded-full text-gray-400 hover:bg-blue-800 hover:text-blue-300 float-right">
-                            <svg class="m-2 h-5 w-5" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                                stroke-width="2" stroke="currentColor" viewBox="0 0 24 24">
-                                <path d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-                <hr class="border-gray-600">
-
                 <!--show more-->
 
                 <div class="flex">
@@ -501,5 +437,38 @@
     </div>
 
 </body>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>
+    var es = document.getElementsByClassName("coeur");
+    for (var i = 0; i < es.length; i++) {
+        (function(i) {
+            es[i].addEventListener("click", function(){
+                toggle = es[i].getAttribute("fill")
+                if (toggle != "red"){
+                    $.ajax({
+                        type: "POST",
+                        url: "{% url 'like_post' %}",
+                        data: {
+                            "post_id": es[i].getAttribute("data-tweetid"),
+                            "user_id": es[i].getAttribute("data-userid"),
+                            "tweet": es[i].getAttribute("data-tweet"),
+                        },
+                    });
+                    es[i].setAttribute("fill", "red")
+                } else {
+                    $.ajax({
+                        type: "POST",
+                        url: "{% url 'unlike_post' %}",
+                        data: {
+                            "post_id": es[i].getAttribute("data-tweetid"),
+                            "user_id": es[i].getAttribute("data-userid"),
+                        },
+                    });
+                    es[i].setAttribute("fill", "none")
+                }
+            }, false);
+        })(i);
+    }
+</script>
 
 </html>
