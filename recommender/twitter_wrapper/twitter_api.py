@@ -16,7 +16,7 @@ class TwitterApi:
     
     def get_tweets(self):
         total_tweets =[]
-        total_tweets += self.get_tweets_from_feed() # + self.get_tweets_from_trends() + self.get_tweets_from_interest() + self.get_tweets_from_people()
+        total_tweets += self.get_tweets_from_feed() + self.get_tweets_from_trends() + self.get_tweets_from_interest() + self.get_tweets_from_people()
         return total_tweets
     
     def get_tweets_from_trends(self):                
