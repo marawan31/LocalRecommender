@@ -25,10 +25,11 @@ def urlize_tweet_text(tweet):
     hashtag_url = '<span class="text-blue-400"> <a href="https://twitter.com/search?q=%%23%s" target="_blank">#%s</a></span>'
     user_url = '<span class="text-sm leading-5 text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150"><a href="https://twitter.com/%s" target="_blank">@%s</a></span>'
     text = tweet.text
-    for hash in tweet.hashtags:
-        text = text.replace('#%s' % hash.text, hashtag_url % (quote(hash.text.encode("utf-8")), hash.text))
-    for mention in tweet.user_mentions:
-        text = text.replace('@%s' % mention.screen_name, user_url % (quote(mention.screen_name), mention.screen_name))
+    if text is not None:
+        for hash in tweet.hashtags:
+            text = text.replace('#%s' % hash.text, hashtag_url % (quote(hash.text.encode("utf-8")), hash.text))
+        for mention in tweet.user_mentions:
+            text = text.replace('@%s' % mention.screen_name, user_url % (quote(mention.screen_name), mention.screen_name))
     return text
 
 @register.filter()
@@ -37,12 +38,18 @@ def expand_tweet_urls(tweet):
         Should be used before urlize_tweet
     """
     text = tweet.full_text
+
+    if text is None:
+        text = tweet.text
+    
     urls = tweet.urls
     if(tweet.retweeted_status != None):
         text = tweet.retweeted_status.full_text
+        if text is None:
+            text = tweet.text
         urls = tweet.retweeted_status.urls
-
-    for url in urls:
-        text = text.replace(url.url, '<span class="text-blue-400"><a href="%s" target="_blank">%s</a></span>' % (url.expanded_url, url.url))
-    tweet.text = text
+    if text is not None:
+        for url in urls:
+            text = text.replace(url.url, '<span class="text-blue-400"><a href="%s" target="_blank">%s</a></span>' % (url.expanded_url, url.url))
+            tweet.text = text
     return tweet
