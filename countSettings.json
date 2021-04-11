@@ -1,6 +1,6 @@
 {
-    "countTrends" : "2",
-    "countFeed" : "10",
-    "countInterestsSubjects" : "2",
-    "countInterestsAccounts" : "2"
+    "countTrends" : 5,
+    "countFeed" : 5,
+    "countRandomSubjects" : 5,
+    "countSubjects" : 20
 }

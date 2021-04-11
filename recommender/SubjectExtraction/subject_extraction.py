@@ -5,7 +5,7 @@ import spacy
 
 def get_hashtags(sentence):
     hashtags = list(filter(lambda x:x[0] == '#', sentence.split()))
-    return [h[1:] for h in hashtags], " ".join(filter(lambda x:x[0] != '#', sentence.split())) 
+    return [h[1:] for h in hashtags]
 
 def remove_links(sentence):
 
@@ -16,7 +16,10 @@ def get_topic(sentence):
     stop_words = set(stopwords.words('english')) 
 
     sentence_wo_links = remove_links(sentence)
-    hashtags, sentence_wo_hashtags = get_hashtags(sentence_wo_links)
+    hashtags = get_hashtags(sentence_wo_links)
+    with open("interest.json") as f:
+        properties = json.loads(f.read())
+
     doc = parser(sentence_wo_hashtags)
 
     subjects = [entity.text for entity in doc.ents] + hashtags

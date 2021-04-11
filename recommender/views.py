@@ -5,6 +5,7 @@ from .SubjectExtraction import subject_extraction
 
 from datetime import datetime
 from os.path import join
+import json
 
 # Create your views here.
 def index(request):
@@ -17,17 +18,44 @@ def index(request):
     }
     return render(request, 'recommender/index.html', context)
 
+def contains(list, filter):
+    for x in list:
+        if filter(x):
+            return True
+    return False
+
 @csrf_exempt
 def like_post(request):
-    user_id = request.POST.get('user_id', '')
+    user_id = "@" + request.POST.get('user_id', '')
     post_id = request.POST.get('post_id', '')
-    dt_string = datetime.now().strftime("%d/%m/%Y-%H:%M:%S")
-    with open(join("data", "likes.txt"), "a") as like_file:
-        like_file.write(f"{dt_string} {user_id} {post_id}\n")
-
     sentence = request.POST.get('tweet', '')
-    with open(join("data", "interest.txt"), "a") as interest_file:
-        interest_file.write(" ".join(subject_extraction.get_topic(sentence)) + "\n")
+    interests = []
+    new_interests = []
+    hash_tags = subject_extraction.get_hashtags(sentence)    
+    with open("interest.json") as f:
+        properties = json.loads(f.read())
+        if properties is not None:
+            interests = properties['interests']
+    set_user = False
+    for x in interests:
+        if x['element'] == user_id:
+            x['weight'] += 0.1
+            set_user = True
+            break
+    if(not set_user):
+        new_interests.append({'element': user_id, 'weight': 0.1})
+
+    for index, interest in enumerate(interests):
+        if (interest in hash_tags):
+            hash_tags.remove(interest)
+            interests[index] += 0.1
+
+    for hash_tag in hash_tags:
+        new_interests.append({'element': hash_tag, 'weight': 0.1})
+    interests.sort(key=lambda e: e['weight'], reverse=True)
+    interests = interests[:(300-len(new_interests))] + new_interests
+    with open('interest.json', 'w') as outfile:
+        json.dump({'interests': interests}, outfile)
 
     return HttpResponse(200)
 
