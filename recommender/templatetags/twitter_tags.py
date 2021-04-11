@@ -2,6 +2,9 @@ from django import template
 
 register = template.Library()
 
+image_html = '<img src="{url}" style="text-align: center;display: block; width:70%; margin:1rem 2rem 0rem 0rem;">'
+video_html = '<video preload="none" playsinline="" aria-label="Embedded video" disablepictureinpicture="" poster="{image_url}" src="{url}" style="background-color: black; top: 0%; left: 0%; transform: rotate(0deg) scale(1.005);width:60%" controls></video>'
+
 @register.filter()
 def twitter_date(value):
     import datetime
@@ -24,11 +27,27 @@ def urlize_tweet_text(tweet):
     text = tweet.full_text
     if text is None:
         text = tweet.text
+
     if text is not None:
         for hash in tweet.hashtags:
             text = text.replace('#%s' % hash.text, hashtag_url % (quote(hash.text.encode("utf-8")), hash.text))
         for mention in tweet.user_mentions:
             text = text.replace('@%s' % mention.screen_name, user_url % (quote(mention.screen_name), mention.screen_name))
+    
+    x = text.rfind(' ')
+    if(x != -1 and text[x+1:x+1+8] == "https://"):
+        text = text[:x]
+
+    if (hasattr(tweet, 'media') and tweet.media is not None):
+        for media in tweet.media:
+            if(media.type == "photo"):
+                text += image_html.format(url=media.media_url_https)
+            elif(media.type == "video"):
+                first = next(filter(lambda variant: variant['content_type'] =='video/mp4', media.video_info['variants']), None)
+                if(first is not None):
+                    video_url = first['url']
+                    image_url = media.media_url_https
+                    text += video_html.format(image_url=image_url, url=video_url)
     if(text.startswith("RT ")):
         return text[2:]
     return text
@@ -39,7 +58,6 @@ def expand_tweet_urls(tweet):
         Should be used before urlize_tweet
     """
     text = tweet.full_text
-
     if text is None:
         text = tweet.text
     
@@ -52,7 +70,8 @@ def expand_tweet_urls(tweet):
     if text is not None:
         for url in urls:
             text = text.replace(url.url, '<span class="text-blue-400"><a href="%s" target="_blank">%s</a></span>' % (url.expanded_url, url.url))
-            tweet.text = text
+            
+    tweet.text = text
     return tweet
 
 

@@ -439,8 +439,20 @@
     </div>
 
 </body>
+{% load static %}
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="{% static 'recommender/isInViewport.js' %}"></script>
+<script src="{% static 'recommender/jquery.visible.js' %}"></script>
 <script>
+    $(document).scroll(function() {
+        $('video').each(function() {
+            if ($(this).visible(true)) {
+                $(this)[0].play();
+            } else {
+                $(this)[0].pause();
+            }
+        })
+    });
     var es = document.getElementsByClassName("coeur");
     for (var i = 0; i < es.length; i++) {
         (function(i) {

@@ -27,7 +27,6 @@ def contains(list, filter):
 @csrf_exempt
 def like_post(request):
     user_id = "@" + request.POST.get('user_id', '')
-    post_id = request.POST.get('post_id', '')
     sentence = request.POST.get('tweet', '')
     interests = []
     new_interests = []
@@ -61,12 +60,20 @@ def like_post(request):
 
 @csrf_exempt
 def unlike_post(request):
-    post_id = request.POST.get('post_id', '')
-    with open(join("data", "likes.txt"), "r") as f:
-        lines = f.readlines()
-    with open(join("data", "likes.txt"), "w") as f:
-        for line in lines:
-            if line.split(" ")[2].strip() != post_id:
-                f.write(line)
+    user_id = "@" + request.POST.get('user_id', '')
+    interests = []
+    set_user = False
+    with open("interest.json") as f:
+        properties = json.loads(f.read())
+        if properties is not None:
+            interests = properties['interests']
+            for x in interests:
+                if x['element'] == user_id:
+                    x['weight'] -= 0.1
+                    set_user = True
+                    break
+    if(set_user):
+        with open('interest.json', 'w') as outfile:
+            json.dump({'interests': interests}, outfile)
 
     return HttpResponse(200)
