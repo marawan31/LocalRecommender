@@ -28,11 +28,9 @@ class TwitterApi:
                     for interest in interests:
                         if (interest['element'].startswith('@')):
                             some_tweets = self.get_tweets_from_person(interest["element"][1:])
-                            print(some_tweets[0])
                             tweets_interests.append({'weight': interest['weight'], 'interest': interest['element'], 'tweets': some_tweets})
                         else:
                             some_tweets = self.get_tweets_from_interest(interest["element"])
-                            print(some_tweets[0])
                             tweets_interests.append({'weight': interest['weight'], 'interest': interest['element'], 'tweets': some_tweets})
 
         # Maybe we can have a better way later using this normalization, but for now we get 1 tweet per interest 
@@ -71,12 +69,10 @@ class TwitterApi:
         for trend in random.sample(trends, tweet_count):
             tweets = self.api.GetSearch(raw_query="q=" + trend.query +"%20-filter%3Areplies%20-filter%3Aretweets&tweet_mode=extended&count=1&lang=en", count=1, lang='en', result_type='popular')
             tweetsTrending += tweets
-        print(tweetsTrending[0])
         return tweetsTrending
 
     def get_tweets_from_feed(self, tweet_count):              
         some_tweets = self.api.GetHomeTimeline(count=tweet_count, exclude_replies=True)
-        print(some_tweets[0])
         return some_tweets
 
     def get_tweets_from_person(self, user_screen_name):
