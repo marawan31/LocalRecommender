@@ -30,7 +30,8 @@ def like_post(request):
     sentence = request.POST.get('tweet', '')
     interests = []
     new_interests = []
-    hash_tags = subject_extraction.get_hashtags(sentence)    
+    hash_tags = subject_extraction.get_hashtags(sentence) #+ subject_extraction.get_topics(sentence)
+    #subjects = subject_extraction.get_topics(sentence)
     with open("interest.json") as f:
         properties = json.loads(f.read())
         if properties is not None:

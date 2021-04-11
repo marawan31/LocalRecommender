@@ -11,18 +11,12 @@ def remove_links(sentence):
 
     return " ".join(filter(lambda x:x[0:4] != 'http', sentence.split())) 
 
-def get_topic(sentence):
+def get_topics(sentence):
     parser = spacy.load("en_core_web_sm")
-    stop_words = set(stopwords.words('english')) 
-
+    stop_words = set(stopwords.words('english'))
     sentence_wo_links = remove_links(sentence)
-    hashtags = get_hashtags(sentence_wo_links)
-    with open("interest.json") as f:
-        properties = json.loads(f.read())
-
-    doc = parser(sentence_wo_hashtags)
-
-    subjects = [entity.text for entity in doc.ents] + hashtags
+    doc = parser(sentence_wo_links)
+    subjects = [entity.text for entity in doc.ents]
 
     # Remove stop words in each sentence
     new_subjects = []
