@@ -1,17 +1,17 @@
 from django import template
 
+from datetime import datetime, timezone
+
 register = template.Library()
 
 image_html = '<img src="{url}" style="text-align: center;display: block; width:70%; margin:1rem 2rem 0rem 0rem;">'
 video_html = '<video preload="none" playsinline="" aria-label="Embedded video" disablepictureinpicture="" poster="{image_url}" src="{url}" style="background-color: black; top: 0%; left: 0%; transform: rotate(0deg) scale(1.005);width:60%" controls></video>'
 
+
 @register.filter()
 def twitter_date(value):
-    import datetime
-    split_date = value.split()
-    del split_date[0], split_date[-2]
-    value = ' '.join(split_date)  # Fri Nov 07 17:57:59 +0000 2014 is the format
-    return datetime.datetime.strptime(value, '%b %d %H:%M:%S %Y')
+    newDate = datetime.strptime(value, "%a %b %d %H:%M:%S %z %Y").replace(tzinfo=timezone.utc).astimezone(tz=None)
+    return newDate
 
 @register.filter()
 def urlize_tweet_text(tweet):
