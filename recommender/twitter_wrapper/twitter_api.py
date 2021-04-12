@@ -25,6 +25,10 @@ class TwitterApi:
                         return element['weight']
                     interests.sort(key=sortFunc, reverse=True)
                     interests = interests[:self.counts['countSubjects']]
+                    tweets_random_interest = interests[self.counts['countSubjects']:]
+                    count_random = min(len(tweets_random_interest), self.counts['countRandomSubjects'])
+                    rest_of_tweets = random.sample(tweets_random_interest, count_random)
+                    interests += rest_of_tweets
                     for interest in interests:
                         if (interest['element'].startswith('@')):
                             some_tweets = self.get_tweets_from_person(interest["element"][1:])
@@ -49,7 +53,7 @@ class TwitterApi:
 
         count_trends = self.counts['countTrends']
         count_feed = self.counts['countFeed']
-        remaining_count = self.counts['countSubjects'] - len(total_tweets)
+        remaining_count = self.counts['countSubjects'] + self.counts['countRandomSubjects'] - len(total_tweets)
         if(remaining_count > 0):
             count_trends += int(remaining_count /2)
             count_feed += int(remaining_count /2)
