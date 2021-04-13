@@ -41,21 +41,3 @@ to make this work with twitter you need to add `localsettings.json` and it needs
     }
 }
 ```
-
-
-
-215 -> 10 par categorie et 5 pour le feed et 5 pour les trends
-
-300 categorie sauvegarder
-
-20 categorie d'interet considere (hashtag et personne)
-
-35 en tweets tous
-
-20 -> poids
-
-5 -> en random des restes des categories
-
-5 -> le feed
-
-5 -> les trends (random sur les 10 des trends)
