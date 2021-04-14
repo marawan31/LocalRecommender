@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 register = template.Library()
 
 image_html = '<img src="{url}" style="text-align: center;display: block; width:70%; margin:1rem 2rem 0rem 0rem;">'
-video_html = '<video preload="none" playsinline="" aria-label="Embedded video" disablepictureinpicture="" poster="{image_url}" src="{url}" style="background-color: black; top: 0%; left: 0%; transform: rotate(0deg) scale(1.005);width:60%" controls></video>'
+video_html = '<video preload="none" playsinline="" aria-label="Embedded video" disablepictureinpicture="" poster="{image_url}" src="{url}" style="background-color: black; top: 0%; left: 0%; transform: rotate(0deg) scale(1.005);width:60%" controls muted></video>'
 
 
 @register.filter()
